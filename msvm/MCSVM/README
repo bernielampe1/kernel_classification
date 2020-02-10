@@ -1,0 +1,173 @@
+MCSVM_1.0 - Multiclass SVM
+
+Copyright (C) Koby Crammer and Yoram Singer
+Code was developed 2001-2004 at the Hebrew University, Jerusalem, Israel
+
+Written by Koby Crammer
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+1. Terms of use
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+MCSVM_1.0 is freeware and is distributed under the conditions of the GNU 
+General Public License version 2, which allows free distribution and
+modification but prevents the use of this code in commercial packages. 
+
+You are welcome to use the code for your research under the terms of the 
+license. However, please acknowledge its use with the following citation:
+
+
+	Koby Crammer
+	"MCSVM_1.0: C Code for Multiclass SVM",
+	http://www.cis.upenn.edu/~crammer, 2003.
+
+If you use the code and find it useful, I would appreciate a note from you:
+
+	crammer@cis.upenn.edu
+
+
+
+2. The Code
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+run :
+gunzip MCSVM_1.0.tar.gz
+tar -xvf MCSVM_1.0.tar
+make
+
+There are five executables, arranged in three groups.
+1) mcsvm-train, mcol-train, mcsvm-ol-train
+2) mcol-test
+3) mcls2txt
+
+The first group contains the learning algorithms. All of them learn a multi-class
+classifier which employs one vector "w" per class. 
+
+1)
+   a. mcsvm-train    : an implementation the algorithm given in [1].
+   b. mcol-train     : an online algorithm (named MIRA) which uses small QP's and
+                       can be find in section 5 of [2].
+   c. mcsvm-ol-train : uses MIRA as a filter over the training set.
+                       It first runs MIRA and marks all the examples which MIRA 
+                       used as support patterns. This subset of support pattern 
+                       are used as a training set for the multiclass SVM batch 
+                       algorithm. When the training set is large (as in MNIST) 
+                       this decreases the run time.
+
+For each executable run "<executable> -h" to get all the option. 
+A standard run on a prefix of USPS looks like (see the sub-directory example),
+
+mcsvm-train    -m 500 -l 256 -k 10 -b 0.1 -t 2 -d 9 example/usps.train.500 example/usps.cls
+mcsvm-ol-train -m 500 -l 256 -k 10 -b 0.1 -t 2 -d 9 example/usps.train.500 example/usps.cls
+mcol-train     -m 500 -l 256 -k 10 -b 0.1 -t 2 -d 9 example/usps.train.500 example/usps.cls
+
+2) mcol-test	: evaluates a classifier (obtained by one of the above programs) 
+   on a test set. 
+	
+It should invoked as follows :
+
+mcol-test example/usps.train.500 example/usps.cls example/usps.test.500 example/usps.rpt 500
+
+3) mcls2txt	: All the training algorithms save their output in a binary 
+                  format. To convert a classifier from binary to ASCII text run 
+                  mcls2txt.
+
+3. The Data
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Data set should be prepared in a single file (training set and a test set should
+be saved in different files).
+Each instance is placed in a line in the following format :
+<label> <feat_1> ... <feat_l>
+
+A <label> is an integer between 0 and k-1.
+A <feat> is any number in a floating point format.
+
+4. Running 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+4.1 Training
+
+This part focuses on mcsvm-train but the two other training applications are
+used similarly. Type their names to get more details.
+
+Usage : mcsvm-train [options] [train data] [classifier name]
+[options] is a list of [option-name option-value] given below. Each [option-name]
+starts with a "-".
+[train data] is the name of the training data file (input)
+[classifier name] is the name of the resulting classification rule file (output).
+
+Options
+=======
+Flag  Type of value     Meaning [notation on references]
+====  =============     ================================
+-m    int               no. of training examples [m]
+-l    int               data dimension [l]
+-k    int               no. of classes [k]
+-b    double            margin [beta]
+-e    double            tolerance value [epsilon]
+-z    double            initialize margin 
+-c    int               The application uses a LRU cache to store kernel values.
+                        This value indicates the maximal cache size in Mb. 
+                        The application tries to allocate memory as much as 
+                        possible up to this bound.
+-t    (0..4)            kernel type:
+                        0 - exponent exp(-(||A-B||^2)/(2*sigma^2))
+                        1 - exponent np (sigma=1)
+                        2 - homogeneous polynom (AxB)^degree
+                        3 - non-homogeneous polynom (a0+AxB)^degree
+                        4 - non-homogeneous polynom (1+AxB)^degree
+-d    int               polynomial degree (for -t 2, 3, 4)
+-a    int               polynomial constant a0 (for -t 3)
+-s    int               exponent standard deviation (for -t 0)
+-r    int               Specific optimization algorithm. 
+                        0 - exact (described in [3])
+                        1 - approximate (described in [1,2])
+                        2 - binary exact (analytical solution for k=2 classes)
+-w    double            approximation tolerance [delta] for approximate method
+-h                      this help
+
+4.2 Testing
+
+usage: mcol-test [train data] [classifier] [test data] [report] [no. test data]
+[train data]    name of the training data files used to train the classifier.
+[classifier]    name of the classifiers file that was the output of the 
+                training phase. This file is equal to [classifier name] from
+                training applications.
+[test data]     name of the test data file.
+[report]        name of the performance report file
+[no. test data] see note above
+
+4.3 Notes
+
+1. The training algorithms get the size of training set as an argument
+and the test (evaluation) algorithm gets the size of the test set. 
+If you use as an argument a value which is less than the true size, 
+the algorithms will use only a prefix of the data.
+
+2. The data vectors are stored in sparse data structure. The running time is 
+slightly longer on dense data but significantly faster on sparse data.
+
+
+5. Bibliography
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+[1] Koby Crammer and Yoram Singer
+    "On the Algorithmic Implementation of Multiclass Kernel-based Vector Machines"
+    Journal of Machine Learning Research, 2001. 
+[2] Koby Crammer and Yoram Singer
+    "Ultraconservative Online Algorithms for Multiclass Problems", 
+    Journal of Machine Learning Research, 2003.
+[3] Koby Crammer and Yoram Singer
+    "On the Learnability and Design of Output Codes for Multiclass Problems"
+    Machine Learning 47, 2002. 
+
+
+5. Acknowledgements
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Eyal Krupka
+Yoram Singer
+Giora Unger
+
+===============================================
+Please do not distribute with out a premission.
+Any comments or questions are welcomed.
+crammer@cis.upenn.edu
+===============================================

@@ -1,0 +1,45 @@
+
+Summary
+=======================
+
+General
+ no of labels : 5
+ dimension    : 100
+
+Files
+ train data : ./data/100_data.txt	(1500 examples)
+ classifier : ./size_cls/50_data_poly.cls
+ test data  : ./100_test.txt	(3000 examples)
+
+Kernel
+ kernel_type :	kernel_polynomial_homo (2)
+ polynom_degree :	2
+ polynom_a0 :	1.000000
+ exponent_sigma :	0.500000
+
+Scaling
+ used scaling : no
+ scale factor : 0.0000000000
+ zero mean    : no
+
+Support Patterns
+ total suppurt patterns : 1431
+ suppurt patterns per class
+		class	support patterns
+		0	339
+		1	670
+		2	1018
+		3	1284
+		4	1133
+
+Error Statsitics
+ test error : 87.87% (2636 / 3000)
+
+ error statistics (correct/predicted)
+        0    1    2    3    4 
+   0  171    3    0   22    4 
+   1  348    0    0   42   10 
+   2  471    0    0  102   27 
+   3  623    0    0  131   46 
+   4  751    0    0  187   62 
+

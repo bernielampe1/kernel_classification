@@ -1,0 +1,45 @@
+
+Summary
+=======================
+
+General
+ no of labels : 5
+ dimension    : 100
+
+Files
+ train data : ./data/100_data.txt	(300 examples)
+ classifier : ./size_cls/10_data_rbf.cls
+ test data  : ./100_test.txt	(3000 examples)
+
+Kernel
+ kernel_type :	kernel_exponent (0)
+ polynom_degree :	1
+ polynom_a0 :	1.000000
+ exponent_sigma :	3.000000
+
+Scaling
+ used scaling : no
+ scale factor : 0.0000000000
+ zero mean    : no
+
+Support Patterns
+ total suppurt patterns : 300
+ suppurt patterns per class
+		class	support patterns
+		0	114
+		1	212
+		2	276
+		3	269
+		4	222
+
+Error Statsitics
+ test error : 51.47% (1544 / 3000)
+
+ error statistics (correct/predicted)
+        0    1    2    3    4 
+   0    0    0    0  200    0 
+   1    0    0    0  400    0 
+   2    0    0    0  600    0 
+   3    0    0    1  637  162 
+   4    0    0    0  181  819 
+

@@ -1,0 +1,55 @@
+
+Summary
+=======================
+
+General
+ no of labels : 10
+ dimension    : 256
+
+Files
+ train data : usps.train.500	(500 examples)
+ classifier : usps.cls
+ test data  : usps.test.500	(500 examples)
+
+Kernel
+ kernel_type :	kernel_polynomial_homo (2)
+ polynom_degree :	9
+ polynom_a0 :	1.000000
+ exponent_sigma :	0.500000
+
+Scaling
+ used scaling : no
+ scale factor : 0.0000000000
+ zero mean    : no
+
+Support Patterns
+ total suppurt patterns : 406
+ suppurt patterns per class
+		class	support patterns
+		0	363
+		1	330
+		2	352
+		3	352
+		4	340
+		5	351
+		6	348
+		7	348
+		8	367
+		9	359
+
+Error Statsitics
+ test error : 11.40% (57 / 500)
+
+ error statistics (correct/predicted)
+        0    1    2    3    4    5    6    7    8    9 
+   0  117    0    0    0    1    0    0    0    0    1 
+   1    0   65    0    0    0    0    2    0    0    1 
+   2    4    0   40    3    0    0    0    0    3    0 
+   3    1    0    0   20    0    3    0    1    4    0 
+   4    0    2    0    0   29    0    0    0    0    3 
+   5    3    0    0    3    1   16    0    0    3    0 
+   6    5    0    1    1    0    0   39    0    0    0 
+   7    0    0    0    0    1    0    0   33    0    2 
+   8    2    0    0    1    0    0    0    0   40    1 
+   9    0    0    0    0    2    0    0    1    1   44 
+
